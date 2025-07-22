@@ -316,7 +316,7 @@ class SPPFCSPC(nn.Module):
         return self.cv7(torch.cat((y1, y2), dim=1))
 
 
-class Involution(nn.Module):
+class IFEM-1(nn.Module):
 
     def __init__(self, c1, c2, kernel_size, stride):
         super(Involution, self).__init__()
@@ -425,7 +425,7 @@ class SpatialAttention(nn.Module):
         return self.sigmoid(x)
 
 
-class CBAMBottleneck(nn.Module):
+class CBAM-C2F(nn.Module):
     # ch_in, ch_out, shortcut, groups, expansion, ratio, kernel_size
     def __init__(self, c1, c2, kernel_size=3, shortcut=True, g=1, e=0.5, ratio=16):
         super(CBAMBottleneck, self).__init__()
@@ -1230,7 +1230,7 @@ class FFM_Concat3(nn.Module):
         return torch.cat(x, self.d)
 
 
-class FEM(nn.Module):
+class IFEM(nn.Module):
     def __init__(self, in_planes, out_planes, stride=1, scale=0.1, map_reduce=8):
         super(FEM, self).__init__()
         self.scale = scale
