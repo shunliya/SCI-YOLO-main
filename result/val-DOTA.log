@@ -1,0 +1,36 @@
+(FFACC) PS D:\python-code\SCI-YOLO-main> python val.py --data DOTA.yaml --weights runs/train/SCI-YOLO-exp8/weights/best.pt --task test --name SCI-YOLO-DOTA --exist-ok --device 0
+val: data=D:\python-code\SCI-YOLO-main\data\DOTA.yaml, weights=['runs/train/SCI-YOLO-exp8/weights/best.pt'], batch_size=32, imgsz=640, conf_thres=0.001, iou_thres=0.6, max_det=300, task=test, device=0, workers=8, single_cls=False, augment=False, verbose=False, save_txt=False, save_hybrid=False, save_conf=False, save_json=False, project=runs\val, name=CISA-YOLO-DOTA, exist_ok=True, half=False, dnn=False
+'gbk' codec can't decode byte 0xff in position 0: illegal multibyte sequence
+2025-4-28 Python-3.10.17 torch-2.7.0+cu128 CUDA:0 (NVIDIA GeForce RTX 5070, 12226MiB)
+
+Fusing layers...
+SCI-YOLO summary: 355 layers, 12645060 parameters, 0 gradients, 82.3 GFLOPs
+test: Scanning D:\python-code\SCI-YOLO-main\my-data-5\labels\val_DOTA.cache... 3278 images, 0 backgrounds, 9 corrupt: 100%|██████████| 3278/3278 [00:00<?, ?it/s]
+val: WARNING  D:\python-code\SCI-YOLO-main\my-data-5\images\val_DOTA\P0261__1__0___0.png: ignoring corrupt image/label: non-normalized or out of bounds coordinates [     1.0024]
+val: WARNING  D:\python-code\SCI-YOLO-main\my-data-5\images\val_DOTA\P0261__1__0___74.png: ignoring corrupt image/label: non-normalized or out of bounds coordinates [     1.0024]
+val: WARNING  D:\python-code\SCI-YOLO-main\my-data-5\images\val_DOTA\P0683__1__824___1400.png: ignoring corrupt image/label: non-normalized or out of bounds coordinates [     1.0147]
+val: WARNING  D:\python-code\SCI-YOLO-main\my-data-5\images\val_DOTA\P0683__1__824___824.png: ignoring corrupt image/label: non-normalized or out of bounds coordinates [     1.0054]
+val: WARNING  D:\python-code\SCI-YOLO-main\my-data-5\images\val_DOTA\P2365__1__824___824.png: ignoring corrupt image/label: non-normalized or out of bounds coordinates [     1.0135]
+val: WARNING  D:\python-code\SCI-YOLO-main\my-data-5\images\val_DOTA\P2393__1__824___727.png: ignoring corrupt image/label: non-normalized or out of bounds coordinates [     1.0153]
+val: WARNING  D:\python-code\SCI-YOLO-main\my-data-5\images\val_DOTA\P2789__1__2472___1648.png: ignoring corrupt image/label: non-normalized or out of bounds coordinates [     1.0497      1.0905]
+val: WARNING  D:\python-code\SCI-YOLO-main\my-data-5\images\val_DOTA\P2789__1__2472___824.png: ignoring corrupt image/label: non-normalized or out of bounds coordinates [     1.0318]
+val: WARNING  D:\python-code\SCI-YOLO-main\my-data-5\images\val_DOTA\P2789__1__3296___1648.png: ignoring corrupt image/label: non-normalized or out of bounds coordinates [     1.0029]
+                 Class     Images  Instances          P          R      mAP50   mAP50-95: 100%|██████████| 103/103 [01:07<00:00,  1.52it/s]
+                   all       3269      59788      0.763      0.676      0.708      0.407
+         small-vehicle       3269       5296       0.93      0.878       0.92      0.664
+         large-vehicle       3269        403      0.847      0.767      0.789      0.451
+                 plane       3269        892      0.585      0.469      0.433      0.172
+          storage-tank       3269        316      0.707      0.364      0.519      0.272
+                  ship       3269      10828      0.679      0.747      0.723      0.396
+                harbor       3269       9256      0.828      0.826      0.858      0.545
+    ground-track-field       3269      19558      0.874       0.85      0.872      0.561
+     soccer-ball-field       3269       1602      0.888      0.825       0.84      0.553
+          tennis-court       3269        297      0.799      0.643      0.651      0.429
+         swimming-pool       3269       5012      0.879      0.714      0.796      0.496
+      baseball-diamond       3269        351      0.736      0.479      0.584      0.337
+            roundabout       3269        299      0.805      0.575      0.638      0.323
+      basketball-court       3269       4781      0.767      0.725      0.748      0.353
+                bridge       3269        763      0.645      0.725      0.673      0.261
+            helicopter       3269        134      0.475       0.56      0.572      0.285
+Speed: 0.1ms pre-process, 10.1ms inference, 1.5ms NMS per image at shape (32, 3, 640, 640)
+FPS: 85.177
