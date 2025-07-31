@@ -1,9 +1,8 @@
-# YOLOv5 🚀 by Ultralytics, AGPL-3.0 license
-"""
-Validate a trained YOLOv5 detection model on a detection dataset
+# Ultralytics YOLO 🚀, AGPL-3.0 license"""
+Validate a trained YOLOv8 detection model on a detection dataset
 
 Usage:
-    $ python val.py --weights yolov5s.pt --data coco128.yaml --img 640
+    $ python val.py --weights YOLOv8s.pt --data coco128.yaml --img 640
 """
 
 import argparse
@@ -30,7 +29,7 @@ torch.serialization.add_safe_globals([
 # ==== 修复代码结束 ====
 
 FILE = Path(__file__).resolve()
-ROOT = FILE.parents[0]  # YOLOv5 root directory
+ROOT = FILE.parents[0]  # YOLOv8 root directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
@@ -308,7 +307,7 @@ def run(
     # Save JSON
     if save_json and len(jdict):
         w = Path(weights[0] if isinstance(weights, list) else weights).stem if weights is not None else ''  # weights
-        anno_json = str(Path('D:\yemu\code\python\yolov5-prune-light\yolov5-prune\datasets\AI-TOD\instances_test2017.json'))  # annotations
+        anno_json = str(Path('D:\yemu\code\python\YOLOv8-prune-light\YOLOv8-prune\datasets\AI-TOD\instances_test2017.json'))  # annotations
         pred_json = str(save_dir / f'{w}_predictions.json')  # predictions
         LOGGER.info(f'\nEvaluating pycocotools mAP... saving {pred_json}...')
         with open(pred_json, 'w') as f:
@@ -344,7 +343,7 @@ def run(
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='dataset.yaml path')
-    parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'yolov5s.pt', help='model path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'YOLOv8s.pt', help='model path(s)')
     parser.add_argument('--batch-size', type=int, default=32, help='batch size')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.001, help='confidence threshold')
@@ -376,7 +375,7 @@ def main(opt):
     check_requirements(ROOT / 'requirements.txt', exclude=('tensorboard', 'thop'))
 
     if opt.task in ('train', 'val', 'test'):  # run normally
-        if opt.conf_thres > 0.001:  # https://github.com/ultralytics/yolov5/issues/1466
+        if opt.conf_thres > 0.001:  # https://github.com/ultralytics/YOLOv8/issues/1466
             LOGGER.info(f'WARNING ⚠️ confidence threshold {opt.conf_thres} > 0.001 produces invalid results')
         if opt.save_hybrid:
             LOGGER.info('WARNING ⚠️ --save-hybrid will return high mAP from hybrid labels, not from predictions alone')
@@ -386,13 +385,13 @@ def main(opt):
         weights = opt.weights if isinstance(opt.weights, list) else [opt.weights]
         opt.half = torch.cuda.is_available() and opt.device != 'cpu'  # FP16 for fastest results
         if opt.task == 'speed':  # speed benchmarks
-            # python val.py --task speed --data coco.yaml --batch 1 --weights yolov5n.pt yolov5s.pt...
+            # python val.py --task speed --data coco.yaml --batch 1 --weights YOLOv8n.pt YOLOv8s.pt...
             opt.conf_thres, opt.iou_thres, opt.save_json = 0.25, 0.45, False
             for opt.weights in weights:
                 run(**vars(opt), plots=False)
 
         elif opt.task == 'study':  # speed vs mAP benchmarks
-            # python val.py --task study --data coco.yaml --iou 0.7 --weights yolov5n.pt yolov5s.pt...
+            # python val.py --task study --data coco.yaml --iou 0.7 --weights YOLOv8n.pt YOLOv8s.pt...
             for opt.weights in weights:
                 f = f'study_{Path(opt.data).stem}_{Path(opt.weights).stem}.txt'  # filename to save to
                 x, y = list(range(256, 1536 + 128, 128)), []  # x axis (image sizes), y axis
