@@ -1,32 +1,32 @@
 # Ultralytics YOLO 🚀, AGPL-3.0 license
 """
-PyTorch Hub models https://pytorch.org/hub/ultralytics_yolov5
+PyTorch Hub models https://pytorch.org/hub/ultralytics_YOLOv8
 
 Usage:
     import torch
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s')  # official model
-    model = torch.hub.load('ultralytics/yolov5:master', 'yolov5s')  # from branch
-    model = torch.hub.load('ultralytics/yolov5', 'custom', 'yolov5s.pt')  # custom/local model
-    model = torch.hub.load('.', 'custom', 'yolov5s.pt', source='local')  # local repo
+    model = torch.hub.load('ultralytics/YOLOv8', 'YOLOv8s')  # official model
+    model = torch.hub.load('ultralytics/YOLOv8:master', 'YOLOv8s')  # from branch
+    model = torch.hub.load('ultralytics/YOLOv8', 'custom', 'YOLOv8s.pt')  # custom/local model
+    model = torch.hub.load('.', 'custom', 'YOLOv8s.pt', source='local')  # local repo
 """
 
 import torch
 
 
 def _create(name, pretrained=True, channels=3, classes=80, autoshape=True, verbose=True, device=None):
-    """Creates or loads a YOLOv5 model
+    """Creates or loads a YOLOv8 model
 
     Arguments:
-        name (str): model name 'yolov5s' or path 'path/to/best.pt'
+        name (str): model name 'YOLOv8s' or path 'path/to/best.pt'
         pretrained (bool): load pretrained weights into the model
         channels (int): number of input channels
         classes (int): number of model classes
-        autoshape (bool): apply YOLOv5 .autoshape() wrapper to model
+        autoshape (bool): apply YOLOv8 .autoshape() wrapper to model
         verbose (bool): print all information to screen
         device (str, torch.device, None): device to use for model parameters
 
     Returns:
-        YOLOv5 model
+        YOLOv8 model
     """
     from pathlib import Path
 
@@ -49,10 +49,10 @@ def _create(name, pretrained=True, channels=3, classes=80, autoshape=True, verbo
                 model = DetectMultiBackend(path, device=device, fuse=autoshape)  # detection model
                 if autoshape:
                     if model.pt and isinstance(model.model, ClassificationModel):
-                        LOGGER.warning('WARNING ⚠️ YOLOv5 ClassificationModel is not yet AutoShape compatible. '
+                        LOGGER.warning('WARNING ⚠️ YOLOv8 ClassificationModel is not yet AutoShape compatible. '
                                        'You must pass torch tensors in BCHW to this model, i.e. shape(1,3,224,224).')
                     elif model.pt and isinstance(model.model, SegmentationModel):
-                        LOGGER.warning('WARNING ⚠️ YOLOv5 SegmentationModel is not yet AutoShape compatible. '
+                        LOGGER.warning('WARNING ⚠️ YOLOv8 SegmentationModel is not yet AutoShape compatible. '
                                        'You will not be able to run inference with this model.')
                     else:
                         model = AutoShape(model)  # for file/URI/PIL/cv2/np inputs and NMS
@@ -73,64 +73,64 @@ def _create(name, pretrained=True, channels=3, classes=80, autoshape=True, verbo
         return model.to(device)
 
     except Exception as e:
-        help_url = 'https://docs.ultralytics.com/yolov5/tutorials/pytorch_hub_model_loading'
+        help_url = 'https://docs.ultralytics.com/YOLOv8/tutorials/pytorch_hub_model_loading'
         s = f'{e}. Cache may be out of date, try `force_reload=True` or see {help_url} for help.'
         raise Exception(s) from e
 
 
 def custom(path='path/to/model.pt', autoshape=True, _verbose=True, device=None):
-    # YOLOv5 custom or local model
+    # YOLOv8 custom or local model
     return _create(path, autoshape=autoshape, verbose=_verbose, device=device)
 
 
-def yolov5n(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-nano model https://github.com/ultralytics/yolov5
-    return _create('yolov5n', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8n(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-nano model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8n', pretrained, channels, classes, autoshape, _verbose, device)
 
 
-def yolov5s(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-small model https://github.com/ultralytics/yolov5
-    return _create('yolov5s', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8s(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-small model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8s', pretrained, channels, classes, autoshape, _verbose, device)
 
 
-def yolov5m(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-medium model https://github.com/ultralytics/yolov5
-    return _create('yolov5m', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8m(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-medium model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8m', pretrained, channels, classes, autoshape, _verbose, device)
 
 
-def yolov5l(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-large model https://github.com/ultralytics/yolov5
-    return _create('yolov5l', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8l(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-large model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8l', pretrained, channels, classes, autoshape, _verbose, device)
 
 
-def yolov5x(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-xlarge model https://github.com/ultralytics/yolov5
-    return _create('yolov5x', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8x(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-xlarge model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8x', pretrained, channels, classes, autoshape, _verbose, device)
 
 
-def yolov5n6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-nano-P6 model https://github.com/ultralytics/yolov5
-    return _create('yolov5n6', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8n6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-nano-P6 model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8n6', pretrained, channels, classes, autoshape, _verbose, device)
 
 
-def yolov5s6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-small-P6 model https://github.com/ultralytics/yolov5
-    return _create('yolov5s6', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8s6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-small-P6 model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8s6', pretrained, channels, classes, autoshape, _verbose, device)
 
 
-def yolov5m6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-medium-P6 model https://github.com/ultralytics/yolov5
-    return _create('yolov5m6', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8m6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-medium-P6 model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8m6', pretrained, channels, classes, autoshape, _verbose, device)
 
 
-def yolov5l6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-large-P6 model https://github.com/ultralytics/yolov5
-    return _create('yolov5l6', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8l6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-large-P6 model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8l6', pretrained, channels, classes, autoshape, _verbose, device)
 
 
-def yolov5x6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    # YOLOv5-xlarge-P6 model https://github.com/ultralytics/yolov5
-    return _create('yolov5x6', pretrained, channels, classes, autoshape, _verbose, device)
+def YOLOv8x6(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
+    # YOLOv8-xlarge-P6 model https://github.com/ultralytics/YOLOv8
+    return _create('YOLOv8x6', pretrained, channels, classes, autoshape, _verbose, device)
 
 
 if __name__ == '__main__':
@@ -144,7 +144,7 @@ if __name__ == '__main__':
 
     # Argparser
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model', type=str, default='yolov5s', help='model name')
+    parser.add_argument('--model', type=str, default='YOLOv8s', help='model name')
     opt = parser.parse_args()
     print_args(vars(opt))
 
