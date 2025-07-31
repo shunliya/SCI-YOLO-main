@@ -428,7 +428,7 @@ class SpatialAttention(nn.Module):
 class CBAM-C2F(nn.Module):
     # ch_in, ch_out, shortcut, groups, expansion, ratio, kernel_size
     def __init__(self, c1, c2, kernel_size=3, shortcut=True, g=1, e=0.5, ratio=16):
-        super(CBAMBottleneck, self).__init__()
+        super(CBAM-C2F, self).__init__()
         c_ = int(c2 * e)  # hidden channels
         self.cv1 = Conv(c1, c_, 1, 1)
         self.cv2 = Conv(c_, c2, 3, 1, g=g)
