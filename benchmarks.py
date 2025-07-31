@@ -1,20 +1,20 @@
-# YOLOv5 🚀 by Ultralytics, AGPL-3.0 license
+# YOLOv8 🚀 by Ultralytics, AGPL-3.0 license
 """
-Run YOLOv5 benchmarks on all supported export formats
+Run YOLOv8 benchmarks on all supported export formats
 
 Format                      | `export.py --include`         | Model
 ---                         | ---                           | ---
-PyTorch                     | -                             | yolov5s.pt
-TorchScript                 | `torchscript`                 | yolov5s.torchscript
-ONNX                        | `onnx`                        | yolov5s.onnx
-OpenVINO                    | `openvino`                    | yolov5s_openvino_model/
-TensorRT                    | `engine`                      | yolov5s.engine
-CoreML                      | `coreml`                      | yolov5s.mlmodel
-TensorFlow SavedModel       | `saved_model`                 | yolov5s_saved_model/
-TensorFlow GraphDef         | `pb`                          | yolov5s.pb
-TensorFlow Lite             | `tflite`                      | yolov5s.tflite
-TensorFlow Edge TPU         | `edgetpu`                     | yolov5s_edgetpu.tflite
-TensorFlow.js               | `tfjs`                        | yolov5s_web_model/
+PyTorch                     | -                             | YOLOv8s.pt
+TorchScript                 | `torchscript`                 | YOLOv8s.torchscript
+ONNX                        | `onnx`                        | YOLOv8s.onnx
+OpenVINO                    | `openvino`                    | YOLOv8s_openvino_model/
+TensorRT                    | `engine`                      | YOLOv8s.engine
+CoreML                      | `coreml`                      | YOLOv8s.mlmodel
+TensorFlow SavedModel       | `saved_model`                 | YOLOv8s_saved_model/
+TensorFlow GraphDef         | `pb`                          | YOLOv8s.pb
+TensorFlow Lite             | `tflite`                      | YOLOv8s.tflite
+TensorFlow Edge TPU         | `edgetpu`                     | YOLOv8s_edgetpu.tflite
+TensorFlow.js               | `tfjs`                        | YOLOv8s_web_model/
 
 Requirements:
     $ pip install -r requirements.txt coremltools onnx onnx-simplifier onnxruntime openvino-dev tensorflow-cpu  # CPU
@@ -22,7 +22,7 @@ Requirements:
     $ pip install -U nvidia-tensorrt --index-url https://pypi.ngc.nvidia.com  # TensorRT
 
 Usage:
-    $ python benchmarks.py --weights yolov5s.pt --img 640
+    $ python benchmarks.py --weights YOLOv8s.pt --img 640
 """
 
 import argparse
@@ -34,7 +34,7 @@ from pathlib import Path
 import pandas as pd
 
 FILE = Path(__file__).resolve()
-ROOT = FILE.parents[0]  # YOLOv5 root directory
+ROOT = FILE.parents[0]  # YOLOv8 root directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 # ROOT = ROOT.relative_to(Path.cwd())  # relative
@@ -49,7 +49,7 @@ from val import run as val_det
 
 
 def run(
-        weights=ROOT / 'yolov5s.pt',  # weights path
+        weights=ROOT / 'YOLOv8s.pt',  # weights path
         imgsz=640,  # inference size (pixels)
         batch_size=1,  # batch size
         data=ROOT / 'data/coco128.yaml',  # dataset.yaml path
@@ -110,13 +110,13 @@ def run(
     LOGGER.info(str(py if map else py.iloc[:, :2]))
     if hard_fail and isinstance(hard_fail, str):
         metrics = py['mAP50-95'].array  # values to compare to floor
-        floor = eval(hard_fail)  # minimum metric floor to pass, i.e. = 0.29 mAP for YOLOv5n
+        floor = eval(hard_fail)  # minimum metric floor to pass, i.e. = 0.29 mAP for YOLOv8n
         assert all(x > floor for x in metrics if pd.notna(x)), f'HARD FAIL: mAP50-95 < floor {floor}'
     return py
 
 
 def test(
-        weights=ROOT / 'yolov5s.pt',  # weights path
+        weights=ROOT / 'YOLOv8s.pt',  # weights path
         imgsz=640,  # inference size (pixels)
         batch_size=1,  # batch size
         data=ROOT / 'data/coco128.yaml',  # dataset.yaml path
@@ -149,7 +149,7 @@ def test(
 
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', type=str, default=ROOT / 'yolov5s.pt', help='weights path')
+    parser.add_argument('--weights', type=str, default=ROOT / 'YOLOv8s.pt', help='weights path')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--batch-size', type=int, default=1, help='batch size')
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='dataset.yaml path')
