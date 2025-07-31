@@ -397,9 +397,7 @@ class ChannelAttention(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        # 全局平均池化—>MLP两层卷积
         avg_out = self.f2(self.relu(self.f1(self.avg_pool(x))))
-        # 全局最大池化—>MLP两层卷积
         max_out = self.f2(self.relu(self.f1(self.max_pool(x))))
         out = self.sigmoid(avg_out + max_out)
         return out
@@ -414,11 +412,8 @@ class SpatialAttention(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        # 基于channel的全局平均池化(channel=1)
         avg_out = torch.mean(x, dim=1, keepdim=True)
-        # 基于channel的全局最大池化(channel=1)
         max_out, _ = torch.max(x, dim=1, keepdim=True)
-        # channel拼接(channel=2)
         x = torch.cat([avg_out, max_out], dim=1)
         # channel=1
         x = self.conv(x)
@@ -433,7 +428,7 @@ class CBAM-C2F(nn.Module):
         self.cv1 = Conv(c1, c_, 1, 1)
         self.cv2 = Conv(c_, c2, 3, 1, g=g)
         self.add = shortcut and c1 == c2
-        # 加入CBAM模块
+        # Integrate the CBAM module
         self.channel_attention = ChannelAttention(c2, ratio)
         self.spatial_attention = SpatialAttention(kernel_size)
 
@@ -484,7 +479,7 @@ class Concat(nn.Module):
 
 
 class DetectMultiBackend(nn.Module):
-    # YOLOv5 MultiBackend class for python inference on various backends
+    # YOLOv8 MultiBackend class for python inference on various backends
     def __init__(self, weights='yolov5s.pt', device=torch.device('cpu'), dnn=False, data=None, fp16=False, fuse=True):
         # Usage:
         #   PyTorch:              weights = *.pt
