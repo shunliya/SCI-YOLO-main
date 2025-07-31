@@ -319,7 +319,7 @@ class SPPFCSPC(nn.Module):
 class IFEM-1(nn.Module):
 
     def __init__(self, c1, c2, kernel_size, stride):
-        super(Involution, self).__init__()
+        super(IFEM-1, self).__init__()
         self.kernel_size = kernel_size
         self.stride = stride
         self.c1 = c1
@@ -438,9 +438,8 @@ class CBAM-C2F(nn.Module):
         self.spatial_attention = SpatialAttention(kernel_size)
 
     def forward(self, x):
-        # 考虑加入CBAM模块的位置：bottleneck模块刚开始时、bottleneck模块中shortcut之前，这里选择在shortcut之前
-        x2 = self.cv2(self.cv1(x))  # x和x2的channel数相同
-        # 在bottleneck模块中shortcut之前加入CBAM模块
+        x2 = self.cv2(self.cv1(x))  # x and x2 have the same number of channels
+        # In the bottleneck module, the CBAM module is added after the shortcut
         out = self.channel_attention(x2) * x2
         # print('outchannels:{}'.format(out.shape))
         out = self.spatial_attention(out) * out
@@ -1186,9 +1185,7 @@ class FFM_Concat2(nn.Module):
         self.Channel_all = int(Channel1 + Channel2)
         self.w = nn.Parameter(torch.ones(self.Channel_all, dtype=torch.float32), requires_grad=True)
         self.epsilon = 0.0001
-        # 设置可学习参数 nn.Parameter的作用是：将一个不可训练的类型Tensor转换成可以训练的类型 parameter
-        # 并且会向宿主模型注册该参数 成为其一部分 即model.parameters()会包含这个parameter
-        # 从而在参数优化的时候可以自动一起优化
+
 
     def forward(self, x):
         N1, C1, H1, W1 = x[0].size()
@@ -1219,8 +1216,8 @@ class FFM_Concat3(nn.Module):
         N2, C2, H2, W2 = x[1].size()
         N3, C3, H3, W3 = x[2].size()
 
-        w = self.w[:(C1 + C2 + C3)]  # 加了这一行可以确保能够剪枝
-        weight = w / (torch.sum(w, dim=0) + self.epsilon)  # 将权重进行归一化
+        w = self.w[:(C1 + C2 + C3)]  # 
+        weight = w / (torch.sum(w, dim=0) + self.epsilon)  # 
         # Fast normalized fusion
 
         x1 = (weight[:C1] * x[0].view(N1, H1, W1, C1)).view(N1, C1, H1, W1)
@@ -1404,7 +1401,6 @@ class BasicRFB(nn.Module):
         return out
 
 
-#分组SPPCSPC 分组后参数量和计算量与原本差距不大，不知道效果怎么样
 class SPPCSPC_group(nn.Module):
     def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5, k=(5, 9, 13)):
         super(SPPCSPC_group, self).__init__()
