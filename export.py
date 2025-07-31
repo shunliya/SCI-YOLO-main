@@ -1,46 +1,46 @@
 # Ultralytics YOLO 🚀, AGPL-3.0 license
 """
-Export a YOLOv5 PyTorch model to other formats. TensorFlow exports authored by https://github.com/zldrobit
+Export a YOLOv8 PyTorch model to other formats. TensorFlow exports authored by https://github.com/zldrobit
 
 Format                      | `export.py --include`         | Model
 ---                         | ---                           | ---
-PyTorch                     | -                             | yolov5s.pt
-TorchScript                 | `torchscript`                 | yolov5s.torchscript
-ONNX                        | `onnx`                        | yolov5s.onnx
-OpenVINO                    | `openvino`                    | yolov5s_openvino_model/
-TensorRT                    | `engine`                      | yolov5s.engine
-CoreML                      | `coreml`                      | yolov5s.mlmodel
-TensorFlow SavedModel       | `saved_model`                 | yolov5s_saved_model/
-TensorFlow GraphDef         | `pb`                          | yolov5s.pb
-TensorFlow Lite             | `tflite`                      | yolov5s.tflite
-TensorFlow Edge TPU         | `edgetpu`                     | yolov5s_edgetpu.tflite
-TensorFlow.js               | `tfjs`                        | yolov5s_web_model/
-PaddlePaddle                | `paddle`                      | yolov5s_paddle_model/
+PyTorch                     | -                             | YOLOv8s.pt
+TorchScript                 | `torchscript`                 | YOLOv8s.torchscript
+ONNX                        | `onnx`                        | YOLOv8s.onnx
+OpenVINO                    | `openvino`                    | YOLOv8s_openvino_model/
+TensorRT                    | `engine`                      | YOLOv8s.engine
+CoreML                      | `coreml`                      | YOLOv8s.mlmodel
+TensorFlow SavedModel       | `saved_model`                 | YOLOv8s_saved_model/
+TensorFlow GraphDef         | `pb`                          | YOLOv8s.pb
+TensorFlow Lite             | `tflite`                      | YOLOv8s.tflite
+TensorFlow Edge TPU         | `edgetpu`                     | YOLOv8s_edgetpu.tflite
+TensorFlow.js               | `tfjs`                        | YOLOv8s_web_model/
+PaddlePaddle                | `paddle`                      | YOLOv8s_paddle_model/
 
 Requirements:
     $ pip install -r requirements.txt coremltools onnx onnx-simplifier onnxruntime openvino-dev tensorflow-cpu  # CPU
     $ pip install -r requirements.txt coremltools onnx onnx-simplifier onnxruntime-gpu openvino-dev tensorflow  # GPU
 
 Usage:
-    $ python export.py --weights yolov5s.pt --include torchscript onnx openvino engine coreml tflite ...
+    $ python export.py --weights YOLOv8s.pt --include torchscript onnx openvino engine coreml tflite ...
 
 Inference:
-    $ python detect.py --weights yolov5s.pt                 # PyTorch
-                                 yolov5s.torchscript        # TorchScript
-                                 yolov5s.onnx               # ONNX Runtime or OpenCV DNN with --dnn
-                                 yolov5s_openvino_model     # OpenVINO
-                                 yolov5s.engine             # TensorRT
-                                 yolov5s.mlmodel            # CoreML (macOS-only)
-                                 yolov5s_saved_model        # TensorFlow SavedModel
-                                 yolov5s.pb                 # TensorFlow GraphDef
-                                 yolov5s.tflite             # TensorFlow Lite
-                                 yolov5s_edgetpu.tflite     # TensorFlow Edge TPU
-                                 yolov5s_paddle_model       # PaddlePaddle
+    $ python detect.py --weights YOLOv8s.pt                 # PyTorch
+                                 YOLOv8s.torchscript        # TorchScript
+                                 YOLOv8s.onnx               # ONNX Runtime or OpenCV DNN with --dnn
+                                 YOLOv8s_openvino_model     # OpenVINO
+                                 YOLOv8s.engine             # TensorRT
+                                 YOLOv8s.mlmodel            # CoreML (macOS-only)
+                                 YOLOv8s_saved_model        # TensorFlow SavedModel
+                                 YOLOv8s.pb                 # TensorFlow GraphDef
+                                 YOLOv8s.tflite             # TensorFlow Lite
+                                 YOLOv8s_edgetpu.tflite     # TensorFlow Edge TPU
+                                 YOLOv8s_paddle_model       # PaddlePaddle
 
 TensorFlow.js:
-    $ cd .. && git clone https://github.com/zldrobit/tfjs-yolov5-example.git && cd tfjs-yolov5-example
+    $ cd .. && git clone https://github.com/zldrobit/tfjs-YOLOv8-example.git && cd tfjs-YOLOv8-example
     $ npm install
-    $ ln -s ../../yolov5/yolov5s_web_model public/yolov5s_web_model
+    $ ln -s ../../YOLOv8/YOLOv8s_web_model public/YOLOv8s_web_model
     $ npm start
 """
 
@@ -61,7 +61,7 @@ import torch
 from torch.utils.mobile_optimizer import optimize_for_mobile
 
 FILE = Path(__file__).resolve()
-ROOT = FILE.parents[0]  # YOLOv5 root directory
+ROOT = FILE.parents[0]  # YOLOv8 root directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 if platform.system() != 'Windows':
@@ -97,7 +97,7 @@ class iOSModel(torch.nn.Module):
 
 
 def export_formats():
-    # YOLOv5 export formats
+    # YOLOv8 export formats
     x = [
         ['PyTorch', '-', '.pt', True, True],
         ['TorchScript', 'torchscript', '.torchscript', True, True],
@@ -116,7 +116,7 @@ def export_formats():
 
 
 def try_export(inner_func):
-    # YOLOv5 export decorator, i..e @try_export
+    # YOLOv8 export decorator, i..e @try_export
     inner_args = get_default_args(inner_func)
 
     def outer_func(*args, **kwargs):
@@ -135,7 +135,7 @@ def try_export(inner_func):
 
 @try_export
 def export_torchscript(model, im, file, optimize, prefix=colorstr('TorchScript:')):
-    # YOLOv5 TorchScript model export
+    # YOLOv8 TorchScript model export
     LOGGER.info(f'\n{prefix} starting export with torch {torch.__version__}...')
     f = file.with_suffix('.torchscript')
 
@@ -151,7 +151,7 @@ def export_torchscript(model, im, file, optimize, prefix=colorstr('TorchScript:'
 
 @try_export
 def export_onnx(model, im, file, opset, dynamic, simplify, prefix=colorstr('ONNX:')):
-    # YOLOv5 ONNX export
+    # YOLOv8 ONNX export
     check_requirements('onnx>=1.12.0')
     import onnx
 
@@ -207,7 +207,7 @@ def export_onnx(model, im, file, opset, dynamic, simplify, prefix=colorstr('ONNX
 
 @try_export
 def export_openvino(file, metadata, half, int8, data, prefix=colorstr('OpenVINO:')):
-    # YOLOv5 OpenVINO export
+    # YOLOv8 OpenVINO export
     check_requirements('openvino-dev>=2022.3')  # requires openvino-dev: https://pypi.org/project/openvino-dev/
     import openvino.runtime as ov  # noqa
     from openvino.tools import mo  # noqa
@@ -274,7 +274,7 @@ def export_openvino(file, metadata, half, int8, data, prefix=colorstr('OpenVINO:
 
 @try_export
 def export_paddle(model, im, file, metadata, prefix=colorstr('PaddlePaddle:')):
-    # YOLOv5 Paddle export
+    # YOLOv8 Paddle export
     check_requirements(('paddlepaddle', 'x2paddle'))
     import x2paddle
     from x2paddle.convert import pytorch2paddle
@@ -289,7 +289,7 @@ def export_paddle(model, im, file, metadata, prefix=colorstr('PaddlePaddle:')):
 
 @try_export
 def export_coreml(model, im, file, int8, half, nms, prefix=colorstr('CoreML:')):
-    # YOLOv5 CoreML export
+    # YOLOv8 CoreML export
     check_requirements('coremltools')
     import coremltools as ct
 
@@ -314,7 +314,7 @@ def export_coreml(model, im, file, int8, half, nms, prefix=colorstr('CoreML:')):
 
 @try_export
 def export_engine(model, im, file, half, dynamic, simplify, workspace=4, verbose=False, prefix=colorstr('TensorRT:')):
-    # YOLOv5 TensorRT export https://developer.nvidia.com/tensorrt
+    # YOLOv8 TensorRT export https://developer.nvidia.com/tensorrt
     assert im.device.type != 'cpu', 'export running on CPU but must be on GPU, i.e. `python export.py --device 0`'
     try:
         import tensorrt as trt
@@ -323,7 +323,7 @@ def export_engine(model, im, file, half, dynamic, simplify, workspace=4, verbose
             check_requirements('nvidia-tensorrt', cmds='-U --index-url https://pypi.ngc.nvidia.com')
         import tensorrt as trt
 
-    if trt.__version__[0] == '7':  # TensorRT 7 handling https://github.com/ultralytics/yolov5/issues/6012
+    if trt.__version__[0] == '7':  # TensorRT 7 handling https://github.com/ultralytics/YOLOv8/issues/6012
         grid = model.model[-1].anchor_grid
         model.model[-1].anchor_grid = [a[..., :1, :1, :] for a in grid]
         export_onnx(model, im, file, 12, dynamic, simplify)  # opset 12
@@ -387,7 +387,7 @@ def export_saved_model(model,
                        conf_thres=0.25,
                        keras=False,
                        prefix=colorstr('TensorFlow SavedModel:')):
-    # YOLOv5 TensorFlow SavedModel export
+    # YOLOv8 TensorFlow SavedModel export
     try:
         import tensorflow as tf
     except Exception:
@@ -428,7 +428,7 @@ def export_saved_model(model,
 
 @try_export
 def export_pb(keras_model, file, prefix=colorstr('TensorFlow GraphDef:')):
-    # YOLOv5 TensorFlow GraphDef *.pb export https://github.com/leimao/Frozen_Graph_TensorFlow
+    # YOLOv8 TensorFlow GraphDef *.pb export https://github.com/leimao/Frozen_Graph_TensorFlow
     import tensorflow as tf
     from tensorflow.python.framework.convert_to_constants import convert_variables_to_constants_v2
 
@@ -445,7 +445,7 @@ def export_pb(keras_model, file, prefix=colorstr('TensorFlow GraphDef:')):
 
 @try_export
 def export_tflite(keras_model, im, file, int8, data, nms, agnostic_nms, prefix=colorstr('TensorFlow Lite:')):
-    # YOLOv5 TensorFlow Lite export
+    # YOLOv8 TensorFlow Lite export
     import tensorflow as tf
 
     LOGGER.info(f'\n{prefix} starting export with tensorflow {tf.__version__}...')
@@ -476,7 +476,7 @@ def export_tflite(keras_model, im, file, int8, data, nms, agnostic_nms, prefix=c
 
 @try_export
 def export_edgetpu(file, prefix=colorstr('Edge TPU:')):
-    # YOLOv5 Edge TPU export https://coral.ai/docs/edgetpu/models-intro/
+    # YOLOv8 Edge TPU export https://coral.ai/docs/edgetpu/models-intro/
     cmd = 'edgetpu_compiler --version'
     help_url = 'https://coral.ai/docs/edgetpu/compiler/'
     assert platform.system() == 'Linux', f'export only supported on Linux. See {help_url}'
@@ -508,7 +508,7 @@ def export_edgetpu(file, prefix=colorstr('Edge TPU:')):
 
 @try_export
 def export_tfjs(file, int8, prefix=colorstr('TensorFlow.js:')):
-    # YOLOv5 TensorFlow.js export
+    # YOLOv8 TensorFlow.js export
     check_requirements('tensorflowjs')
     import tensorflowjs as tfjs
 
@@ -574,7 +574,7 @@ def add_tflite_metadata(file, metadata, num_outputs):
 
 
 def pipeline_coreml(model, im, file, names, y, prefix=colorstr('CoreML Pipeline:')):
-    # YOLOv5 CoreML pipeline
+    # YOLOv8 CoreML pipeline
     import coremltools as ct
     from PIL import Image
 
@@ -582,7 +582,7 @@ def pipeline_coreml(model, im, file, names, y, prefix=colorstr('CoreML Pipeline:
     batch_size, ch, h, w = list(im.shape)  # BCHW
     t = time.time()
 
-    # YOLOv5 Output shapes
+    # YOLOv8 Output shapes
     spec = model.get_spec()
     out0, out1 = iter(spec.description.output)
     if platform.system() == 'Darwin':
@@ -674,10 +674,10 @@ def pipeline_coreml(model, im, file, names, y, prefix=colorstr('CoreML Pipeline:
 
     # Update metadata
     pipeline.spec.specificationVersion = 5
-    pipeline.spec.description.metadata.versionString = 'https://github.com/ultralytics/yolov5'
-    pipeline.spec.description.metadata.shortDescription = 'https://github.com/ultralytics/yolov5'
+    pipeline.spec.description.metadata.versionString = 'https://github.com/ultralytics/YOLOv8'
+    pipeline.spec.description.metadata.shortDescription = 'https://github.com/ultralytics/YOLOv8'
     pipeline.spec.description.metadata.author = 'glenn.jocher@ultralytics.com'
-    pipeline.spec.description.metadata.license = 'https://github.com/ultralytics/yolov5/blob/master/LICENSE'
+    pipeline.spec.description.metadata.license = 'https://github.com/ultralytics/YOLOv8/blob/master/LICENSE'
     pipeline.spec.description.metadata.userDefined.update({
         'classes': ','.join(names.values()),
         'iou_threshold': str(nms.iouThreshold),
@@ -699,13 +699,13 @@ def pipeline_coreml(model, im, file, names, y, prefix=colorstr('CoreML Pipeline:
 @smart_inference_mode()
 def run(
         data=ROOT / 'data/coco128.yaml',  # 'dataset.yaml path'
-        weights=ROOT / 'yolov5s.pt',  # weights path
+        weights=ROOT / 'YOLOv8s.pt',  # weights path
         imgsz=(640, 640),  # image (height, width)
         batch_size=1,  # batch size
         device='cpu',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
         include=('torchscript', 'onnx'),  # include formats
         half=False,  # FP16 half-precision export
-        inplace=False,  # set YOLOv5 Detect() inplace=True
+        inplace=False,  # set YOLOv8 Detect() inplace=True
         keras=False,  # use Keras
         optimize=False,  # TorchScript: optimize for mobile
         int8=False,  # CoreML/TF INT8 quantization
@@ -816,7 +816,7 @@ def run(
                     f"\nResults saved to {colorstr('bold', file.parent.resolve())}"
                     f"\nDetect:          python {dir / ('detect.py' if det else 'predict.py')} --weights {f[-1]} {h}"
                     f"\nValidate:        python {dir / 'val.py'} --weights {f[-1]} {h}"
-                    f"\nPyTorch Hub:     model = torch.hub.load('ultralytics/yolov5', 'custom', '{f[-1]}')  {s}"
+                    f"\nPyTorch Hub:     model = torch.hub.load('ultralytics/YOLOv8', 'custom', '{f[-1]}')  {s}"
                     f'\nVisualize:       https://netron.app')
     return f  # return list of exported files/dirs
 
@@ -824,12 +824,12 @@ def run(
 def parse_opt(known=False):
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='dataset.yaml path')
-    parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'yolov5s.pt', help='model.pt path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'YOLOv8s.pt', help='model.pt path(s)')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640, 640], help='image (h, w)')
     parser.add_argument('--batch-size', type=int, default=1, help='batch size')
     parser.add_argument('--device', default='cpu', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--half', action='store_true', help='FP16 half-precision export')
-    parser.add_argument('--inplace', action='store_true', help='set YOLOv5 Detect() inplace=True')
+    parser.add_argument('--inplace', action='store_true', help='set YOLOv8 Detect() inplace=True')
     parser.add_argument('--keras', action='store_true', help='TF: use Keras')
     parser.add_argument('--optimize', action='store_true', help='TorchScript: optimize for mobile')
     parser.add_argument('--int8', action='store_true', help='CoreML/TF/OpenVINO INT8 quantization')
