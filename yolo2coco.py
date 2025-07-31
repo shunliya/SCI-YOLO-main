@@ -5,9 +5,9 @@ from tqdm import tqdm
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--root_dir', default='D:\\yemu\\code\\python\\yolov5-prune-light\\yolov5-prune\\datasets\\AI-TOD', type=str,
+parser.add_argument('--root_dir', default='D:\\code\\python\\yolov5-prune-light\\yolov8-prune\\datasets\\AI-TOD', type=str,
                     help="root path of images and labels, include ./images and ./labels and classes.txt")
-parser.add_argument('--save_path', type=str, default='D:\\yemu\\code\\python\\yolov5-prune-light\\yolov5-prune\\datasets\\AI-TOD\\instances_test2017.json',
+parser.add_argument('--save_path', type=str, default='D:\\code\\python\\yolov8-prune-light\\yolov5-prune\\datasets\\AI-TOD\\instances_test2017.json',
                     help="if not split the dataset, give a path to a json file")
 
 arg = parser.parse_args()
@@ -31,14 +31,10 @@ def yolo2coco(arg):
     # 标注的id
     ann_id_cnt = 0
     for k, index in enumerate(tqdm(indexes)):
-        # 支持 png jpg 格式的图片。
         txtFile = index.replace('images', 'txt').replace('.jpg', '.txt').replace('.png', '.txt')
-        # 读取图像的宽和高
         im = cv2.imread(os.path.join(originImagesDir, index))
         height, width, _ = im.shape
-        # 添加图像的信息
         if not os.path.exists(os.path.join(originLabelsDir, txtFile)):
-            # 如没标签，跳过，只保留图片信息。
             continue
         dataset['images'].append({'file_name': index,
                                   'id': int(index[:-4]) if index[:-4].isnumeric() else index[:-4],
@@ -59,7 +55,6 @@ def yolo2coco(arg):
                 y1 = (y - h / 2) * H
                 x2 = (x + w / 2) * W
                 y2 = (y + h / 2) * H
-                # 标签序号从0开始计算, coco2017数据集标号混乱，不管它了。
                 cls_id = int(label[0])
                 width = max(0, x2 - x1)
                 height = max(0, y2 - y1)
@@ -70,12 +65,10 @@ def yolo2coco(arg):
                     'id': ann_id_cnt,
                     'image_id': int(index[:-4]) if index[:-4].isnumeric() else index[:-4],
                     'iscrowd': 0,
-                    # mask, 矩形是从左上角点按顺时针的四个顶点
                     'segmentation': [[x1, y1, x2, y1, x2, y2, x1, y2]]
                 })
                 ann_id_cnt += 1
 
-    # 保存结果
     with open(arg.save_path, 'w') as f:
         json.dump(dataset, f)
         print('Save annotation to {}'.format(arg.save_path))
