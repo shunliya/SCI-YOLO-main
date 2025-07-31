@@ -1,4 +1,4 @@
-# YOLOv5 🚀 by Ultralytics, GPL-3.0 license
+# Ultralytics YOLO 🚀, AGPL-3.0 license
 """
 Compress a YOLOv5 model on a custom dataset
 
