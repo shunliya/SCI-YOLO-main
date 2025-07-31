@@ -1224,7 +1224,7 @@ class FFM_Concat3(nn.Module):
 
 class IFEM(nn.Module):
     def __init__(self, in_planes, out_planes, stride=1, scale=0.1, map_reduce=8):
-        super(FEM, self).__init__()
+        super(IFEM, self).__init__()
         self.scale = scale
         self.out_channels = out_planes
         inter_planes = in_planes // map_reduce
